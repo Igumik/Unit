@@ -10,6 +10,8 @@ import java.util.Queue;
 public class MainTest {
     private List<Person> clients = new LinkedList<>();
     private Queue<Person> attraction = new LinkedList<>();
+    private int before;
+    private int after;
 
     @BeforeEach
     void added() {
@@ -18,6 +20,10 @@ public class MainTest {
         for (Person p : clients) {
             attraction.offer(p);
         }
+        Person people = attraction.peek();
+        before = people.getTickets();
+        people.down();
+        after = people.getTickets();
     }
 
     @Test
@@ -35,15 +41,6 @@ public class MainTest {
     @Test
     @DisplayName("Тест сколько билетов расходуется после поездки")
     void useTicket() {
-        while (!attraction.isEmpty()) {
-            Person people = attraction.poll();
-            int before = people.getTickets();
-            people.down();
-            int after = people.getTickets();
-            if (people.getTickets() != 0) {
-                attraction.offer(people);
-            }
-            Assertions.assertEquals(1, before - after);
-        }
+        Assertions.assertEquals(1, before - after);
     }
 }
